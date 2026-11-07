@@ -1,0 +1,25 @@
+title: Suspicious Encoded PowerShell Command Line
+id: 05b339f0-f0b9-45af-a927-bf28fc49982a
+status: experimental
+description: Detects PowerShell launched with an encoded command, often used to hide payloads
+author: Felix (DefendWithFelix)
+date: 2026/10/30
+tags:
+    - attack.execution
+    - attack.t1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        Image|endswith:
+            - '\powershell.exe'
+            - '\pwsh.exe'
+    selection_cli:
+        CommandLine|contains:
+            - ' -enc '
+            - ' -EncodedCommand '
+    condition: selection_img and selection_cli
+falsepositives:
+    - Legitimate admin scripts
+level: medium

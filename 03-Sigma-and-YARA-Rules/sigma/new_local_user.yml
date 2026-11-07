@@ -1,0 +1,25 @@
+title: New Local User Created via Net Command
+id: 7a235f77-1d2f-49e5-a4df-78ada9451b52
+status: experimental
+description: Detects creation of a local user account with the net command, often used by attackers for persistence
+author: Felix (DefendWithFelix)
+date: 2026/10/30
+tags:
+    - attack.persistence
+    - attack.t1136.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        Image|endswith:
+            - '\net.exe'
+            - '\net1.exe'
+    selection_cli:
+        CommandLine|contains|all:
+            - ' user '
+            - ' /add'
+    condition: selection_img and selection_cli
+falsepositives:
+    - Administrators creating accounts
+level: medium
